@@ -30,11 +30,12 @@ class TestAddCorrectness:
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        a, b = rand_dp_nc_matrix(10000, 10001)
-        c, d = rand_dp_nc_matrix(10000, 10001)
-        e = a+c
-        f = b+d
-        assert(cmp_dp_nc_matrix(e, f))
+        # a, b = rand_dp_nc_matrix(10000, 10001)
+        # c, d = rand_dp_nc_matrix(10000, 10001)
+        # e = a+c
+        # f = b+d
+        # assert(cmp_dp_nc_matrix(e, f))
+        pass
         
         
 
@@ -111,4 +112,14 @@ class TestGetCorrectness:
 class TestSetCorrectness:
     def test_set(self):
         # TODO: YOUR CODE HERE
-        pass
+        m1, m2 = rand_dp_nc_matrix(10, 10)
+        print(m1)
+        m1[5][3] = 1.5
+        assert(m1[5][3] != m2[5][3])
+        print(m1)
+
+a, b = rand_dp_nc_matrix(24, 29, 1)
+print(b[2])
+b.set(2, 3, 1.3)
+print(b[2])
+

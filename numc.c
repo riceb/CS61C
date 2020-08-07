@@ -484,8 +484,8 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     PyObject* row = NULL;
     PyObject* col = NULL;
     PyObject* val = NULL;
-    if (PyArg_UnpackTuple(args, "args", 2, 2, &row, &col, &val)) {
-        if (PyLong_Check(row) && PyLong_Check(col) && PyFloat_Check(val)) {
+    if (PyArg_UnpackTuple(args, "args", 3, 3, &row, &col, &val)) {
+        if (PyLong_Check(row) && PyLong_Check(col) && PyFloat_Check(val) && PyLong_AsLong(row) >= 0 && PyLong_AsLong(col) >= 0) {
             if (PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols) {
                 PyErr_SetString(PyExc_IndexError, "Out of bounds");
                 return Py_None;
