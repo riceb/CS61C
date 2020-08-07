@@ -388,7 +388,7 @@ static PyObject *Matrix61c_multiply(Matrix61c* self, PyObject *args) {
     }
     Matrix61c* result = (Matrix61c*) Matrix61c_new(&Matrix61cType, NULL, NULL);
     result->mat = new_mat;
-    result->shape = self->shape;
+    result->shape = PyTuple_Pack(2, PyLong_FromLong(new_mat->rows), PyLong_FromLong(new_mat->cols));
     return (PyObject*) result;
 }
 
@@ -485,8 +485,8 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
     PyObject* col = NULL;
     PyObject* val = NULL;
     if (PyArg_UnpackTuple(args, "args", 3, 3, &row, &col, &val)) {
-        if (PyLong_Check(row) && PyLong_Check(col) && PyFloat_Check(val) && PyLong_AsLong(row) >= 0 && PyLong_AsLong(col) >= 0) {
-            if (PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols) {
+        if (PyLong_Check(row) && PyLong_Check(col) && (PyFloat_Check(val)||PyLong_Check(val))) {
+            if (PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols || PyLong_AsLong(row) < 0 || PyLong_AsLong(col) < 0) {
                 PyErr_SetString(PyExc_IndexError, "Out of bounds");
                 return Py_None;
             }
@@ -513,7 +513,7 @@ static PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
     PyObject* col = NULL;
     if (PyArg_UnpackTuple(args, "args", 2, 2, &row, &col)) {
         if (PyLong_Check(row) && PyLong_Check(col)) {
-            if (PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols) {
+            if (PyLong_AsLong(row) < 0 || PyLong_AsLong(col) < 0 || PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols) {
                 PyErr_SetString(PyExc_IndexError, "Out of bounds");
                 return NULL;
             }

@@ -120,6 +120,6 @@ class TestSetCorrectness:
 
 a, b = rand_dp_nc_matrix(24, 29, 1)
 print(b[2])
-b.set(2, 3, 1.3)
+print(b.set(2, 3, 1.3))
 print(b[2])
 
