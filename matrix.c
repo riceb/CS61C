@@ -635,7 +635,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
 
     #pragma omp parallel 
     {
-        omp_set_num_threads(20);
         int block_size = 20;
         int tot_num = row_3 * col_3;
         #pragma omp for
@@ -657,7 +656,6 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     
     #pragma omp parallel 
     {
-        omp_set_num_threads(20);
         #pragma omp for
         for (int k = 0; k < row_1; k++) {
             for (int j = 0; j < col_1; j++) {
@@ -665,7 +663,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                 double* v2 = temp_data + j * row_3;
                 __m256d reference = _mm256_set1_pd(0.0);
                 double* entry = result_data + k * col_1 + j;
-                for (int i = 0; i < col_2/32 * 32; i += 32) {
+                for (int i = 0; i < col_2/64 * 64; i += 64) {
                     __m256d vector1 = _mm256_loadu_pd (v1+i);
                     __m256d vector2 = _mm256_loadu_pd (v2+i);
                     __m256d vector3 = _mm256_mul_pd (vector1, vector2);
@@ -698,6 +696,38 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     vector2 = _mm256_loadu_pd (v2+i+28);
                     vector3 = _mm256_mul_pd (vector1, vector2);
                     reference = _mm256_add_pd(reference, vector3);
+                      vector1 = _mm256_loadu_pd (v1+i+32);
+                    vector2 = _mm256_loadu_pd (v2+i+32);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+36);
+                    vector2 = _mm256_loadu_pd (v2+i+36);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+40);
+                    vector2 = _mm256_loadu_pd (v2+i+40);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+44);
+                    vector2 = _mm256_loadu_pd (v2+i+44);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+48);
+                    vector2 = _mm256_loadu_pd (v2+i+48);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+52);
+                    vector2 = _mm256_loadu_pd (v2+i+52);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+56);
+                    vector2 = _mm256_loadu_pd (v2+i+56);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
+                    vector1 = _mm256_loadu_pd (v1+i+60);
+                    vector2 = _mm256_loadu_pd (v2+i+60);
+                    vector3 = _mm256_mul_pd (vector1, vector2);
+                    reference = _mm256_add_pd(reference, vector3);
                 }
                 double* ptr = malloc(4*sizeof(double));
                 _mm256_storeu_pd(ptr, reference);
@@ -705,7 +735,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
                     entry[0] += ptr[a];
                 }
                 free(ptr);
-                for (int b = col_2/32*32; b < col_2; b++) {
+                for (int b = col_2/64*64; b < col_2; b++) {
                     result_data[k*col_1 + j] += v1[b] * v2[b];
                 }
             }
@@ -739,10 +769,16 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         int rows = mat->rows;
         #pragma omp parallel 
         {
-            omp_set_num_threads(20);
         #pragma omp for
-        for (int i = 0; i < rows*rows; i += (rows+1)) {
+        for (int i = 0; i < rows*rows; i += 8*(rows+1)) {
             result_data[i] = 1.0;
+            result_data[i+rows+1] = 1.0;
+            result_data[i+2*rows+2] = 1.0;
+            result_data[i+3*rows+3] = 1.0;
+            result_data[i+4*rows+4] = 1.0;
+            result_data[i+5*rows+5] = 1.0;
+            result_data[i+6*rows+6] = 1.0;
+            result_data[i+7*rows+7] = 1.0;
         }
         }
         return 0;
@@ -775,11 +811,18 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     // set help matrix as identity
     #pragma omp parallel 
         {
-            omp_set_num_threads(20);
+            
             #pragma omp for
-            for (int i = 0; i < rows*rows; i += (rows+1)) {
-                help[i] = 1.0;
-            }
+            for (int i = 0; i < rows*rows; i += 8*(rows+1)) {
+            help[i] = 1.0;
+            help[i+rows+1] = 1.0;
+            help[i+2*rows+2] = 1.0;
+            help[i+3*rows+3] = 1.0;
+            help[i+4*rows+4] = 1.0;
+            help[i+5*rows+5] = 1.0;
+            help[i+6*rows+6] = 1.0;
+            help[i+7*rows+7] = 1.0;
+        }
         }
     
     int i = pow;
