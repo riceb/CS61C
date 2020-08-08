@@ -11,21 +11,23 @@ Hint: use rand_dp_nc_matrix to generate dumbpy and numc matrices with the same d
 """
 class TestAddCorrectness:
     def test_small_add(self):
-        # TODO: YOUR CODE HERE
-        a, b = rand_dp_nc_matrix(5, 5)
-        c, d = rand_dp_nc_matrix(5, 5)
-        e = a+c
-        f = b+d
+        #TODO: YOUR CODE HERE
+        a, b = rand_dp_nc_matrix(101, 50)
+        c, d = rand_dp_nc_matrix(50, 102)
+        e = a*c
+        f = b*d
         assert(cmp_dp_nc_matrix(e, f))
+        
         
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        a, b = rand_dp_nc_matrix(1000, 900)
-        c, d = rand_dp_nc_matrix(1000, 900)
-        e = a+c
-        f = b+d
-        assert(cmp_dp_nc_matrix(e, f))
+        # a, b = rand_dp_nc_matrix(1000, 900)
+        # c, d = rand_dp_nc_matrix(1000, 900)
+        # e = a+c
+        # f = b+d
+        # assert(cmp_dp_nc_matrix(e, f))
+        pass
     
 
     def test_medium_add(self):
@@ -94,6 +96,8 @@ class TestMulCorrectness:
 class TestPowCorrectness:
     def test_small_pow(self):
         # TODO: YOUR CODE HERE
+        # a, b = rand_dp_nc_matrix(10, 20, rand = True, seed = 0)
+        # c = b**10
         pass
 
     def test_medium_pow(self):
@@ -112,13 +116,12 @@ class TestGetCorrectness:
 class TestSetCorrectness:
     def test_set(self):
         # TODO: YOUR CODE HERE
-        m1, m2 = rand_dp_nc_matrix(10, 10)
-        print(m1)
-        m1[5][3] = 1.5
-        assert(m1[5][3] != m2[5][3])
-        print(m1)
+        pass
 
-a = nc.Matrix(5, 5)
-a.set(1,-1)
+# m1, m2 = rand_dp_nc_matrix(7, 4)
+# m1[5][3] = 1.5
+# assert(m1[5][3] != m2[5][3])
+# print(m1)
+# m2.set(1, 1.1, 1)
 
 

@@ -20,26 +20,54 @@ class TestAddPerformance:
     def test_small_add(self):
         # Initialize matrices using rand_dp_nc_matrix
         # TODO: YOUR CODE HERE
+        m1, m2 = rand_dp_nc_matrix(2999, 2301, rand = True, seed = 0)
+        m3, m4 = rand_dp_nc_matrix(2301, 3001, rand = True, seed = 0)
 
         nc_start = time.time()
         # Carry out numc matrix operations
         # TODO: YOUR CODE HERE
+        # a = m2 * m4
         nc_end = time.time()
 
         dp_start = time.time()
         # Carry out dumbpy matrix operations
         # TODO: YOUR CODE HERE
+        # b = m1 * m3
         dp_end = time.time()
 
         # Check for correctness using cmp_dp_nc_matrix and calculate speedup
         # TODO: YOUR CODE HERE
-        pass
+        # assert(cmp_dp_nc_matrix(b, a))
+        # print(nc_end - nc_start)
+        # print((dp_end-dp_start)/(nc_end - nc_start))
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        pass
+        m1, m2 = rand_dp_nc_matrix(500, 500, rand = True, seed = 0)
+        m3, m4 = rand_dp_nc_matrix(2301, 5000, rand = True, seed = 0)
 
-    def test_medium_add(self):
+        nc_start = time.time()
+        # Carry out numc matrix operations
+        # TODO: YOUR CODE HERE
+
+        a = (m2)**1000
+        nc_end = time.time()
+
+        dp_start = time.time()
+        # Carry out dumbpy matrix operations
+        # TODO: YOUR CODE HERE
+        b = (m1)**1000
+        dp_end = time.time()
+
+        # Check for correctness using cmp_dp_nc_matrix and calculate speedup
+        # TODO: YOUR CODE HERE
+        assert(cmp_dp_nc_matrix(b, a))
+
+        # print(nc_end - nc_start)
+        print((dp_end - dp_start)/(nc_end - nc_start))
+
+
+    def test_large_add(self):
         # TODO: YOUR CODE HERE
         pass
 
