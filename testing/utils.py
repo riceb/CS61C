@@ -24,7 +24,7 @@ def rand_dp_nc_matrix(*args, **kwargs):
         dp_mat, nc_mat = dp.Matrix(*args), nc.Matrix(*args)
     else:
         dp_mat, nc_mat = dp.Matrix(*args, **kwargs), nc.Matrix(*args, **kwargs)
-    return dp_mat, nc_mat
+    return dp_mat, nc_mat, np_mat
 
 """
 Returns whether the given dumbpy matrix dp_mat is equal to the numc matrix nc_mat

@@ -636,10 +636,20 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     #pragma omp parallel 
     {
         omp_set_num_threads(20);
+        int block_size = 20;
+        int tot_num = row_3 * col_3;
         #pragma omp for
-        for (int x = 0; x < col_3; x++) {
-            for (int y = 0; y < row_3; y++) {
-                temp_data[y + x * row_3] = mat2_data[x + y * col_3];
+        for (int x = 0; x < col_3/block_size + 1; x++) {
+            for (int y = 0; y < row_3/block_size + 1; y++) {
+                for (int i = 0; i < block_size; i++) {
+                    for (int j = 0; j < block_size; j++) {
+                        int a = x*row_3*block_size + y*block_size + j*row_3+i;
+                        int b = x*block_size + y*col_3*block_size + i*col_3+j;
+                        if (a < tot_num && b < tot_num) {
+                            temp_data[a] = mat2_data[b];
+                        }
+                    }
+                }
             }
         }
     }
@@ -734,7 +744,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         for (int i = 0; i < rows*rows; i += (rows+1)) {
             result_data[i] = 1.0;
         }
-    }
+        }
         return 0;
     }
 
@@ -748,65 +758,70 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     }
 
     //helper matrix ALLOCATE!
+   
     double* help = calloc(rows*rows, sizeof(double));
     matrix helperm = {rows, rows, help, 1, NULL};
     matrix* helper = &helperm;
-    
+
+    double* data = calloc(rows*rows, sizeof(double));
+    matrix tempm = {rows, rows, data, 1, NULL};
+    matrix* temp = &tempm;
+
+    double* zeros = calloc(rows*rows, sizeof(double));
+    matrix zero = {rows, rows, zeros, 1, NULL};
+    matrix* zeroMatrix = &zero;
+
+
+    // set help matrix as identity
     #pragma omp parallel 
         {
             omp_set_num_threads(20);
-        #pragma omp for
-        for (int i = 0; i < rows*rows; i += (rows+1)) {
-            help[i] = 1.0;
+            #pragma omp for
+            for (int i = 0; i < rows*rows; i += (rows+1)) {
+                help[i] = 1.0;
+            }
         }
-    }
-    //temp matrix for arithmetic 
-    matrix tempm = {rows, rows, NULL, 1, NULL};
-    matrix* temp = &tempm;
-
-    for (int i = pow; i > 1;) {
+    
+    int i = pow;
+    while (i > 1) {
         if (i%2 == 0) {
-            double* data = calloc(rows*rows, sizeof(double));
-            temp->data = data;
-            add_matrix(temp, temp, result);
-            
+            add_matrix(temp, zeroMatrix, result);
             if (mul_matrix(result, temp, temp)) {
                 free(data);
+                free(help);
+                free(zeros);
                 return -1;
             }
-            free(data);
             i = i/2;
         } else {
-            double* data = calloc(rows*rows, sizeof(double));
-            temp->data = data;
-            add_matrix(temp, temp, helper);
+            add_matrix(temp, zeroMatrix, helper);
             if (mul_matrix(helper, temp, result)) {
                 free(data);
+                free(help);
+                free(zeros);
                 return -1;
             }
-
-            double* data1 = calloc(rows*rows, sizeof(double));
-            temp->data = data1;
-            add_matrix(temp, temp, result);
-            
+            add_matrix(temp, zeroMatrix, result);
             if (mul_matrix(result, temp, temp)) {
-                free(data1);
+                free(data);
+                free(help);
+                free(zeros);
                 return -1;
             }
-            free(data);
-            free(data1);
             i = (i-1)/2;
         }
     }
-    double* data2 = calloc(rows*rows, sizeof(double));
-    temp->data = data2;
-    add_matrix(temp, temp, result);
+
+    add_matrix(temp, zeroMatrix, result);
     if (mul_matrix(result, temp, helper)) {
-        free(data2);
+        free(data);
+        free(help);
+        free(zeros);
         return -1;
     }
-    free(data2);
+    free(data);
     free(help);
+    free(zeros);
     return 0;
 }
 
