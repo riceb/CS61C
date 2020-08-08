@@ -165,90 +165,59 @@ void fill_matrix(matrix *mat, double val) {
     int num = (mat->cols) * (mat->rows);
     double* mat_data = mat->data;
     __m256d vector = _mm256_set1_pd(val);
-    // unsigned int num_bottom1 = num/128 * 128;
+    int num_bottom = num/128 * 128;
     // unsigned int num_bottom2 = (num - num_bottom1)/16 * 16 + num_bottom1;
     // unsigned int num_bottom3 = (num - num_bottom1 - num_bottom2)/4 * 4 + num_bottom1 + num_bottom2;
-
-    // for (int i = 0; i < num_bottom1; i += 128) {
-    //     int k = i;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    //     k += 4;
-    //     _mm256_storeu_pd(mat_data + k, vector);
-    // }
-
-    for (int i = 0; i < num/16 * 16; i += 16) {
+    #pragma omp parallel for
+    for (int i = 0; i < num_bottom; i += 128) {
         _mm256_storeu_pd(mat_data + i, vector);
         _mm256_storeu_pd(mat_data + i+4, vector);
         _mm256_storeu_pd(mat_data + i+8, vector);
         _mm256_storeu_pd(mat_data + i+12, vector);
+        _mm256_storeu_pd(mat_data + i+16, vector);
+        _mm256_storeu_pd(mat_data + i+20, vector);
+        _mm256_storeu_pd(mat_data + i+24, vector);
+        _mm256_storeu_pd(mat_data + i+28, vector);
+        _mm256_storeu_pd(mat_data + i+32, vector);
+        _mm256_storeu_pd(mat_data + i+36, vector);
+        _mm256_storeu_pd(mat_data + i+40, vector);
+        _mm256_storeu_pd(mat_data + i+44, vector);
+        _mm256_storeu_pd(mat_data + i+48, vector);
+        _mm256_storeu_pd(mat_data + i+52, vector);
+        _mm256_storeu_pd(mat_data + i+56, vector);
+        _mm256_storeu_pd(mat_data + i+60, vector);
+        _mm256_storeu_pd(mat_data + i+64, vector);
+        _mm256_storeu_pd(mat_data + i+68, vector);
+        _mm256_storeu_pd(mat_data + i+72, vector);
+        _mm256_storeu_pd(mat_data + i+76, vector);
+        _mm256_storeu_pd(mat_data + i+80, vector);
+        _mm256_storeu_pd(mat_data + i+84, vector);
+        _mm256_storeu_pd(mat_data + i+88, vector);
+        _mm256_storeu_pd(mat_data + i+92, vector);
+        _mm256_storeu_pd(mat_data + i+96, vector);
+        _mm256_storeu_pd(mat_data + i+100, vector);
+        _mm256_storeu_pd(mat_data + i+104, vector);
+        _mm256_storeu_pd(mat_data + i+108, vector);
+        _mm256_storeu_pd(mat_data + i+112, vector);
+        _mm256_storeu_pd(mat_data + i+116, vector);
+        _mm256_storeu_pd(mat_data + i+120, vector);
+        _mm256_storeu_pd(mat_data + i+124, vector);
+        
     }
+
+    // for (int i = 0; i < num/16 * 16; i += 16) {
+    //     _mm256_storeu_pd(mat_data + i, vector);
+    //     _mm256_storeu_pd(mat_data + i+4, vector);
+    //     _mm256_storeu_pd(mat_data + i+8, vector);
+    //     _mm256_storeu_pd(mat_data + i+12, vector);
+    // }
 
 
     // for (int i = num_bottom2; i < num_bottom3; i += 4) {
     //     _mm256_storeu_pd(mat_data + i, vector);
     // }
 
-    for (int j = num/16 * 16; j < num; j++) {
+    for (int j = num_bottom; j < num; j++) {
             mat_data[j] = val;
         }
 }
@@ -274,179 +243,29 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
 
     int num = row_1 * col_1;
-    // unsigned int num_bottom1 = num/128 * 128;
+    int num_bottom = num/128 * 128;
     
-        
-    // for (int i = 0; i < num_bottom1; i += 128) {
-    //     int k = i;
-    //    __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
-    //     __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
-    //     __m256d vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_add_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    // }
-
-    // unsigned int num_bottom2 = (num - num_bottom1)/16 * 16 + num_bottom1;
-
-    for (int i = 0; i < num/16 * 16; i += 16) {
+    #pragma omp parallel for
+    for (int i = 0; i < num_bottom; i += 128) {
         int k = i;
-        __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
+       __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
         __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
         __m256d vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
         _mm256_storeu_pd(result_data + k, vector3);
         k += 4;
         vector1 = _mm256_loadu_pd(mat1_data + k);
@@ -463,7 +282,157 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
          vector2 = _mm256_loadu_pd(mat2_data + k);
          vector3 = _mm256_add_pd(vector1, vector2);
         _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_add_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
     }
+
+    // unsigned int num_bottom2 = (num - num_bottom1)/16 * 16 + num_bottom1;
+
+    // for (int i = 0; i < num/16 * 16; i += 16) {
+    //     int k = i;
+    //     __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
+    //     __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
+    //     __m256d vector3 = _mm256_add_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //     vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_add_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //      vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_add_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //     vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_add_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    // }
 
     // unsigned int num_bottom3 = (num - num_bottom1 - num_bottom2)/4 * 4 + num_bottom1 + num_bottom2;
 
@@ -474,7 +443,7 @@ int add_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     _mm256_storeu_pd(result_data + i, vector3);
     // }
     
-    for (int j = num/16 * 16; j < num; j++) {
+    for (int j = num_bottom; j < num; j++) {
         result_data[j] = mat1_data[j] + mat2_data[j];
     }
 
@@ -501,177 +470,30 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     }
     
     int num = row_1 * col_1;
-    // unsigned int num_bottom1 = num/128 * 128;
+    int num_bottom = num/128 * 128;
     // unsigned int num_bottom2 = (num - num_bottom1)/16 * 16 + num_bottom1;
     // unsigned int num_bottom3 = (num - num_bottom1 - num_bottom2)/4 * 4 + num_bottom1 + num_bottom2;
-    // for (int i = 0; i < num_bottom1; i += 128) {
-    //     int k = i;
-    //    __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
-    //     __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
-    //     __m256d vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //      vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //      vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    //     k += 4;
-    //     vector1 = _mm256_loadu_pd(mat1_data + k);
-    //      vector2 = _mm256_loadu_pd(mat2_data + k);
-    //     vector3 = _mm256_sub_pd(vector1, vector2);
-    //     _mm256_storeu_pd(result_data + k, vector3);
-    // } 
-
-    for (int i = 0; i < num/16 * 16; i += 16) {
+    #pragma omp parallel for
+    for (int i = 0; i < num_bottom; i += 128) {
         int k = i;
-        __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
+       __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
         __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
         __m256d vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
         _mm256_storeu_pd(result_data + k, vector3);
         k += 4;
         vector1 = _mm256_loadu_pd(mat1_data + k);
@@ -688,7 +510,155 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
          vector2 = _mm256_loadu_pd(mat2_data + k);
          vector3 = _mm256_sub_pd(vector1, vector2);
         _mm256_storeu_pd(result_data + k, vector3);
-    }
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+         vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+         vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+        k += 4;
+        vector1 = _mm256_loadu_pd(mat1_data + k);
+         vector2 = _mm256_loadu_pd(mat2_data + k);
+        vector3 = _mm256_sub_pd(vector1, vector2);
+        _mm256_storeu_pd(result_data + k, vector3);
+    } 
+
+    // for (int i = 0; i < num/16 * 16; i += 16) {
+    //     int k = i;
+    //     __m256d vector1 = _mm256_loadu_pd(mat1_data + k);
+    //     __m256d vector2 = _mm256_loadu_pd(mat2_data + k);
+    //     __m256d vector3 = _mm256_sub_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //     vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_sub_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //      vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_sub_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    //     k += 4;
+    //     vector1 = _mm256_loadu_pd(mat1_data + k);
+    //      vector2 = _mm256_loadu_pd(mat2_data + k);
+    //      vector3 = _mm256_sub_pd(vector1, vector2);
+    //     _mm256_storeu_pd(result_data + k, vector3);
+    // }
 
     // for (int i = 0; i < num_bottom3; i += 4) {
     //     __m256d vector1 = _mm256_loadu_pd(mat1_data + i);
@@ -697,7 +667,7 @@ int sub_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     //     _mm256_storeu_pd(result_data + i, vector3);
     // }
 
-    for (int j = num/16 * 16; j < num; j++) {
+    for (int j = num_bottom; j < num; j++) {
         result_data[j] = mat1_data[j] - mat2_data[j];
     }
 
@@ -734,10 +704,10 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
     double* mat2_data = mat2->data;
     fill_matrix(result, 0.0);
     
+    #pragma omp parallel for
     for (int k = 0; k < row_1; k++) {
-        for (int j = 0; j < col_1; j++) {
-            for (int i = 0; i < col_2; i++) {
-            
+        for (int i = 0; i < col_2; i++) {
+            for (int j = 0; j < col_1; j++) {
                 result_data[k*col_1 + j] += mat1_data[k*col_2 + i] * mat2_data[i*col_3 + j];
             }
         }
@@ -897,6 +867,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     double* mat_data = mat->data;
     double* result_data = result->data;
     int num_bottom = num/16 * 16;
+
     #pragma omp parallel for
     for (int i = 0; i < num_bottom; i += 16) {
         int k = i;

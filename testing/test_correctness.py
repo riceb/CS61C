@@ -118,6 +118,7 @@ class TestSetCorrectness:
         assert(m1[5][3] != m2[5][3])
         print(m1)
 
-nc.Matrix(5, -1)
+a = nc.Matrix(5, 5)
+a.set(1,-1)
 
 
