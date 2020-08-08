@@ -12,22 +12,24 @@ Hint: use rand_dp_nc_matrix to generate dumbpy and numc matrices with the same d
 class TestAddCorrectness:
     def test_small_add(self):
         #TODO: YOUR CODE HERE
-        a, b = rand_dp_nc_matrix(101, 50)
-        c, d = rand_dp_nc_matrix(50, 102)
-        e = a*c
-        f = b*d
-        assert(cmp_dp_nc_matrix(e, f))
-        
+        # a, b = rand_dp_nc_matrix(101, 50)
+        # c, d = rand_dp_nc_matrix(50, 102)
+        # e = a*c
+        # f = b*d
+        # assert(cmp_dp_nc_matrix(e, f))
+        pass
         
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        # a, b = rand_dp_nc_matrix(1000, 900)
-        # c, d = rand_dp_nc_matrix(1000, 900)
-        # e = a+c
-        # f = b+d
-        # assert(cmp_dp_nc_matrix(e, f))
-        pass
+        a, b = rand_dp_nc_matrix(1000, 1000, rand = True, seed = 0)
+        c = a**1
+        d = b**1
+        e = a**(-1)
+        f = b**(-1)
+        assert(not cmp_dp_nc_matrix(c, d))
+        assert(cmp_dp_nc_matrix(e, f))
+        
     
 
     def test_medium_add(self):
@@ -123,5 +125,10 @@ class TestSetCorrectness:
 # assert(m1[5][3] != m2[5][3])
 # print(m1)
 # m2.set(1, 1.1, 1)
+a, b = rand_dp_nc_matrix(100, 100, rand = True, seed = 0)
+c = a**13
+d = b**13
+assert(cmp_dp_nc_matrix(c, d))
+# assert(cmp_dp_nc_matrix(e, f))
 
 

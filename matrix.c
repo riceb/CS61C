@@ -702,7 +702,7 @@ int mul_matrix(matrix *result, matrix *mat1, matrix *mat2) {
         }
     }
     free(data);
-
+  
     return 0;
 }
 
@@ -729,7 +729,7 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         int rows = mat->rows;
         #pragma omp parallel 
         {
-            omp_set_num_threads(30);
+            omp_set_num_threads(20);
         #pragma omp for
         for (int i = 0; i < rows*rows; i += (rows+1)) {
             result_data[i] = 1.0;
@@ -742,10 +742,25 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
 
     add_matrix(result, result, mat);
 
+
     if (pow == 1) {
         return 0;
     }
 
+    //helper matrix ALLOCATE!
+    double* help = calloc(rows*rows, sizeof(double));
+    matrix helperm = {rows, rows, help, 1, NULL};
+    matrix* helper = &helperm;
+    
+    #pragma omp parallel 
+        {
+            omp_set_num_threads(20);
+        #pragma omp for
+        for (int i = 0; i < rows*rows; i += (rows+1)) {
+            help[i] = 1.0;
+        }
+    }
+    //temp matrix for arithmetic 
     matrix tempm = {rows, rows, NULL, 1, NULL};
     matrix* temp = &tempm;
 
@@ -764,15 +779,34 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
         } else {
             double* data = calloc(rows*rows, sizeof(double));
             temp->data = data;
-            add_matrix(temp, temp, result);
-            if (mul_matrix(result, temp, mat)) {
+            add_matrix(temp, temp, helper);
+            if (mul_matrix(helper, temp, result)) {
                 free(data);
                 return -1;
             }
+
+            double* data1 = calloc(rows*rows, sizeof(double));
+            temp->data = data1;
+            add_matrix(temp, temp, result);
+            
+            if (mul_matrix(result, temp, temp)) {
+                free(data1);
+                return -1;
+            }
             free(data);
-            i -= 1;
+            free(data1);
+            i = (i-1)/2;
         }
     }
+    double* data2 = calloc(rows*rows, sizeof(double));
+    temp->data = data2;
+    add_matrix(temp, temp, result);
+    if (mul_matrix(result, temp, helper)) {
+        free(data2);
+        return -1;
+    }
+    free(data2);
+    free(help);
     return 0;
 }
 

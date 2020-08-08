@@ -488,17 +488,17 @@ static PyObject *Matrix61c_set_value(Matrix61c *self, PyObject* args) {
         if (PyLong_Check(row) && PyLong_Check(col) && (PyFloat_Check(val)||PyLong_Check(val))) {
             if (PyLong_AsLong(row) >= self->mat->rows || PyLong_AsLong(col) >= self->mat->cols || PyLong_AsLong(row) < 0 || PyLong_AsLong(col) < 0) {
                 PyErr_SetString(PyExc_IndexError, "Out of bounds");
-                return Py_None;
+                return NULL;
             }
             set(self->mat, PyLong_AsLong(row), PyLong_AsLong(col), PyFloat_AsDouble(val));
             return Py_None;
         } else {
             PyErr_SetString(PyExc_TypeError, "invalid arguments!");
-            return Py_None;
+            return NULL;
         }
     } else {
         PyErr_SetString(PyExc_TypeError, "invalid arguments!");
-        return Py_None;
+        return NULL;
     }
 }
 
