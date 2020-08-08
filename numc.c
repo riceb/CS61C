@@ -520,11 +520,11 @@ static PyObject *Matrix61c_get_value(Matrix61c *self, PyObject* args) {
             PyObject* result = PyFloat_FromDouble(get(self->mat, PyLong_AsLong(row), PyLong_AsLong(col)));
             return result;
         } else {
-            PyErr_SetString(PyExc_TypeError, "invalid arguments!");
+            PyErr_SetString(PyExc_TypeError, "Invalid number of arguments!");
             return NULL;
         }
     } else {
-        PyErr_SetString(PyExc_TypeError, "invalid arguments!");
+        PyErr_SetString(PyExc_TypeError, "Invalid arguments!");
         return NULL;
     }
 }

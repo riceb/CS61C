@@ -56,6 +56,7 @@ int allocate_matrix(matrix **mat, int rows, int cols) {
     //TODO//
     
     if (rows < 1 || cols < 1) {
+        PyErr_SetString(PyExc_TypeError, "Non-positive dimensions!");
         return -1;
     }
     matrix* pointer_mat = malloc(sizeof(matrix));
@@ -848,7 +849,8 @@ int neg_matrix(matrix *result, matrix *mat) {
     int num = rows*cols;
     double* mat_data = mat->data;
     double* result_data = result->data;
-    unsigned int num_bottom = num/16 * 16;
+    int num_bottom = num/16 * 16;
+    #pragma omp parallel for
     for (int i = 0; i < num_bottom; i += 16) {
         int k = i;
         __m256d vector = _mm256_loadu_pd(mat_data+k);
@@ -895,6 +897,7 @@ int abs_matrix(matrix *result, matrix *mat) {
     double* mat_data = mat->data;
     double* result_data = result->data;
     int num_bottom = num/16 * 16;
+    #pragma omp parallel for
     for (int i = 0; i < num_bottom; i += 16) {
         int k = i;
         __m256d vector = _mm256_loadu_pd(mat_data+k);
@@ -922,7 +925,7 @@ int abs_matrix(matrix *result, matrix *mat) {
         _mm256_storeu_pd(result_data+k, vector);
     }
     for (int j = num_bottom; j < num; j++) {
-        result_data[j] = abs(mat_data[j]);
+        result_data[j] = fmax(mat_data[j], -mat_data[j]);
     }
     return 0;
 }

@@ -118,8 +118,6 @@ class TestSetCorrectness:
         assert(m1[5][3] != m2[5][3])
         print(m1)
 
-a, b = rand_dp_nc_matrix(24, 29, 1)
-print(b[2])
-print(b.set(2, 3, 1.3))
-print(b[2])
+nc.Matrix(5, -1)
+
 
