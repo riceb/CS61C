@@ -43,31 +43,31 @@ class TestAddPerformance:
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        m1, m2 = rand_dp_nc_matrix(1000, 1000, rand = True, seed = 0)
+        m1, m2 = rand_dp_nc_matrix(600, 600, rand = True, seed = 0)
         m3, m4 = rand_dp_nc_matrix(2301, 5000, rand = True, seed = 0)
 
         nc_start = time.time()
         # Carry out numc matrix operations
         # TODO: YOUR CODE HERE
 
-        a = (m2)**100000
+        a = (m2)**101
         nc_end = time.time()
 
         dp_start = time.time()
         # Carry out dumbpy matrix operations
         # TODO: YOUR CODE HERE
-        # b = (m1)**101
+        b = (m1)**101
         dp_end = time.time()
 
         # Check for correctness using cmp_dp_nc_matrix and calculate speedup
         # TODO: YOUR CODE HERE
         # print(nc_end - nc_start)
         
-        # assert(cmp_dp_nc_matrix(b, a))
+        assert(cmp_dp_nc_matrix(b, a))
 
         # print(nc_end - nc_start)
         print(nc_end - nc_start)
-        # print(dp_end - dp_start)
+        print(dp_end - dp_start)
         
 
 
