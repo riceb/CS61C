@@ -20,8 +20,8 @@ class TestAddPerformance:
     def test_small_add(self):
         # Initialize matrices using rand_dp_nc_matrix
         # TODO: YOUR CODE HERE
-        m1, m2 = rand_dp_nc_matrix(10000, 9051, rand = True, seed = 0)
-        m3, m4 = rand_dp_nc_matrix(9051, 7005, rand = True, seed = 0)
+        m1, m2 = rand_dp_nc_matrix(600, 700, rand = True, seed = 0)
+        m3, m4 = rand_dp_nc_matrix(700, 755, rand = True, seed = 0)
 
         nc_start = time.time()
         # Carry out numc matrix operations
@@ -32,42 +32,42 @@ class TestAddPerformance:
         dp_start = time.time()
         # Carry out dumbpy matrix operations
         # TODO: YOUR CODE HERE
-        # b = m1 * m3
+        b = m1 * m3
         dp_end = time.time()
 
         # Check for correctness using cmp_dp_nc_matrix and calculate speedup
         # TODO: YOUR CODE HERE
-        # assert(cmp_dp_nc_matrix(b, a))
+        assert(cmp_dp_nc_matrix(b, a))
         print(nc_end - nc_start)
-        # print((dp_end-dp_start)/(nc_end - nc_start))
+        print((dp_end-dp_start)/(nc_end - nc_start))
 
     def test_medium_add(self):
         # TODO: YOUR CODE HERE
-        m1, m2 = rand_dp_nc_matrix(2000, 2000, rand = True, seed = 0)
+        m1, m2 = rand_dp_nc_matrix(500, 500, rand = True, seed = 0)
         m3, m4 = rand_dp_nc_matrix(2301, 5000, rand = True, seed = 0)
 
         nc_start = time.time()
         # Carry out numc matrix operations
         # TODO: YOUR CODE HERE
 
-        # a = (m2)**100000
+        a = (m2)**101
         nc_end = time.time()
 
         dp_start = time.time()
         # Carry out dumbpy matrix operations
         # TODO: YOUR CODE HERE
-        # b = (m1)**500
+        b = (m1)**101
         dp_end = time.time()
 
         # Check for correctness using cmp_dp_nc_matrix and calculate speedup
         # TODO: YOUR CODE HERE
         # print(nc_end - nc_start)
         
-        # assert(cmp_dp_nc_matrix(b, a))
+        assert(cmp_dp_nc_matrix(b, a))
 
         # print(nc_end - nc_start)
-        # print(nc_end - nc_start)
-        # print(dp_end - dp_start)
+        print(nc_end - nc_start)
+        print(dp_end - dp_start)
         
 
 
