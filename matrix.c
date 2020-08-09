@@ -803,9 +803,13 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     matrix helperm = {rows, rows, help, 1, NULL};
     matrix* helper = &helperm;
 
-    double* data = calloc(rows*rows, sizeof(double));
-    matrix tempm = {rows, rows, data, 1, NULL};
-    matrix* temp = &tempm;
+    double* data1 = calloc(rows*rows, sizeof(double));
+    matrix tempm1 = {rows, rows, data1, 1, NULL};
+    matrix* temp1 = &tempm1;
+
+    double* data2 = calloc(rows*rows, sizeof(double));
+    matrix tempm2 = {rows, rows, data2, 1, NULL};
+    matrix* temp2 = &tempm2;
 
     double* zeros = calloc(rows*rows, sizeof(double));
     matrix zero = {rows, rows, zeros, 1, NULL};
@@ -835,44 +839,92 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     
     int i = pow;
     while (i > 1) {
-        if (i%2 == 0) {
-            add_matrix(temp, zeroMatrix, result);
-            if (mul_matrix(result, temp, temp)) {
-                free(data);
+        if (i%3 == 0) {
+            add_matrix(temp1, zeroMatrix, result);
+            if (mul_matrix(temp2, temp1, temp1)) {
+                free(data1);
                 free(help);
                 free(zeros);
+                free(data2);
                 return -1;
             }
-            i = i/2;
+            if (mul_matrix(result, temp1, temp2)) {
+                free(data1);
+                free(help);
+                free(zeros);
+                free(data2);
+                return -1;
+            }
+            i = i/3;
+        } else if(i%3 == 1 || i == 2) {
+            add_matrix(temp1, zeroMatrix, helper);
+            if (mul_matrix(helper, temp1, result)) {
+                free(data1);
+                free(help);
+                free(zeros);
+                free(data2);
+                return -1;
+            }
+            // add_matrix(temp1, zeroMatrix, result);
+            // if (mul_matrix(temp2, temp1, temp1)) {
+            //     free(data1);
+            //     free(help);
+            //     free(zeros);
+            //     free(data2);
+            //     return -1;
+            // }
+            // if (mul_matrix(result, temp1, temp2)) {
+            //     free(data1);
+            //     free(help);
+            //     free(zeros);
+            //     free(data2);
+            //     return -1;
+            // }
+            i -= 1;
         } else {
-            add_matrix(temp, zeroMatrix, helper);
-            if (mul_matrix(helper, temp, result)) {
-                free(data);
+
+            add_matrix(temp1, zeroMatrix, result);
+            if (mul_matrix(temp2, temp1, temp1)) {
+                free(data1);
                 free(help);
                 free(zeros);
+                free(data2);
                 return -1;
             }
-            add_matrix(temp, zeroMatrix, result);
-            if (mul_matrix(result, temp, temp)) {
-                free(data);
+            
+            if (mul_matrix(result, temp1, temp2)) {
+                free(data1);
                 free(help);
                 free(zeros);
+                free(data2);
                 return -1;
             }
-            i = (i-1)/2;
+
+            add_matrix(temp1, zeroMatrix, helper);
+            if (mul_matrix(helper, temp1, temp2)) {
+                free(data1);
+                free(help);
+                free(zeros);
+                free(data2);
+                return -1;
+            }
+
+            i = (i-2)/3;
         }
     }
 
-    add_matrix(temp, zeroMatrix, result);
-    if (mul_matrix(result, temp, helper)) {
-        free(data);
+    add_matrix(temp1, zeroMatrix, result);
+    if (mul_matrix(result, temp1, helper)) {
+        free(data1);
         free(help);
         free(zeros);
+        free(data2);
         return -1;
     }
-    free(data);
+    free(data1);
     free(help);
     free(zeros);
+    free(data2);
     return 0;
 }
 
