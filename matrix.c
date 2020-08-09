@@ -806,9 +806,6 @@ int pow_matrix(matrix *result, matrix *mat, int pow) {
     matrix tempm1 = {rows, rows, data + rows*rows, 1, NULL};
     matrix* temp1 = &tempm1;
 
-    matrix tempm2 = {rows, rows, data + rows*rows*2, 1, NULL};
-    matrix* temp2 = &tempm2;
-
     matrix zero = {rows, rows, data + rows*rows*3, 1, NULL};
     matrix* zeroMatrix = &zero;
 
